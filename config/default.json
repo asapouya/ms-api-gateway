@@ -1,8 +1,14 @@
 {
     "users": {
-        "name": "users",
+        "service": "users",
         "host": "http://localhost",
         "port": "5000",
-        "url": "http://localhost:5000/"
+        "url": "http://localhost:5000"
+    },
+    "books": {
+        "service": "books",
+        "host": "http://localhost",
+        "port": "3000",
+        "url":"http://localhost:3000"
     }
 }

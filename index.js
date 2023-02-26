@@ -1,26 +1,22 @@
 const express = require("express");
 const app = express();
-const axios = require("axios");
 const config = require("config");
+const axios = require("./utils/axios")
 
 app.use(express.json());
 
-app.all("/:service/:path", async (req, res) => {
+
+app.all("/:service/:path?/:path?", async (req, res) => {
 
     if(!config.has(req.params.service)) return res.status(400).send("service name not a valid service.");
 
     const service = config.get(req.params.service);
-    const path = req.params.path;
-
+    const url = service.url + req.path;
     try {
-        const response = await axios({
-            method: req.method,
-            url: service.url + path,
-            headers: req.headers,
-            data: req.body
-        });
+        const response = await axios(req.method, req.headers, req.body, url)
         res.send(response.data);
     } catch (err) {
+        if(!err.response) return res.status(500).send("Internal Server Error.");
         res.status(err.response.status).send(err.message);
     }
 });
