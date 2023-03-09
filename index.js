@@ -1,25 +1,35 @@
 const express = require("express");
 const app = express();
 const config = require("config");
-const axios = require("./utils/axios")
+const axios = require("axios");
+
+const auth = require("./middlewares/auth");
+
+if(!config.get("JWT_PRIVATE_KEY")) {
+    console.log("FATAL ERROR: JWT_PRIVATE_KEY not defined!");
+    process.exit(1);
+}
 
 app.use(express.json());
 
-
-app.all("/:service/:path?/:path?", async (req, res) => {
-
-    if(!config.has(req.params.service)) return res.status(400).send("service name not a valid service.");
+app.all("/:service/:path?/:path?", auth ,async (req, res) => {
 
     const service = config.get(req.params.service);
     const url = service.url + req.path;
     try {
-        const response = await axios(req.method, req.headers, req.body, url)
-        res.send(response.data);
+        const response = await axios({
+            method: req.method,
+            url: url,
+            headers: req.headers,
+            data: req.body
+        });
+        res.status(response.status).header(response.headers).send(response.data);
     } catch (err) {
         if(!err.response) return res.status(500).send("Internal Server Error.");
-        res.status(err.response.status).send(err.message);
+        console.log(err)
+        res.status(err.response.status).header(err.response.headers).send(err.response.data);
     }
 });
 
-const port = process.env.PORT | 9000;
+const port = process.env.PORT || 9000;
 app.listen(port, () => console.info(`api-gateway running on port ${port}...`));
