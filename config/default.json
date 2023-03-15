@@ -1,13 +1,30 @@
 {
     "JWT_PRIVATE_KEY": "",
+
+    "services": [
+        {
+            "name": "users",
+            "url": "http://localhost:5000",
+            "route": [
+                {
+                    "path": "/users",
+                    "method": "GET"
+                }
+            ]
+        }
+    ],
+
     "users": {
         "service": "users",
         "host": "http://localhost",
         "port": "5000",
         "url": "http://localhost:5000",
         "routes": {
-            "http://localhost:5000/users": {
+            "/users": {
                 "POST": {
+                    "permissions": []
+                },
+                "GET": {
                     "permissions": []
                 }
             }
@@ -19,9 +36,14 @@
         "port": "3000",
         "url":"http://localhost:3000",
         "routes": {
-            "http://localhost:3000/books/admin":{
+            "/books/admin":{
                 "POST": {
                     "permissions": ["auth", "admin"]
+                }
+            },
+            "/books": {
+                "GET": {
+                    "permissions": []
                 }
             }
         }
@@ -32,12 +54,12 @@
         "port": "4000",
         "url":"http://localhost:4000",
         "routes": {
-            "http://localhost:4000/auth/login": {
+            "/auth/login": {
                 "POST": {
                     "permissions": []
                 }
             },
-            "http://localhost:4000/auth/signup": {
+            ":4000/auth/signup": {
                 "POST": {
                     "permissions": []
                 }
@@ -48,13 +70,6 @@
         "service": "orders",
         "host": "http://localhost",
         "port": "6000",
-        "url":"http://localhost:6000",
-        "routes": {
-            "http://localhost:6000/orders/{bookId}": {
-                "POST": {
-                    "permissions": ["auth"]
-                }
-            }
-        }
+        "url":"http://localhost:6000"
     }
 }

@@ -15,7 +15,8 @@ app.use(express.json());
 app.all("/:service/:path?/:path?", auth ,async (req, res) => {
 
     const service = config.get(req.params.service);
-    const url = service.url + req.path;
+    const url = service.url + req.path;    
+    req.headers["x-user"] = JSON.stringify(req.user);
     try {
         const response = await axios({
             method: req.method,
