@@ -9,67 +9,24 @@
                 {
                     "path": "/users",
                     "method": "GET"
+                },
+                {
+                    "path": "/users/:userId",
+                    "method": "GET"
+                },
+                {
+                    "path": "/users",
+                    "method": "POST"
+                },
+                {
+                    "path": "/users/:userId",
+                    "method": "PUT"
+                },
+                {
+                    "path": "/users/:userId",
+                    "method": "DELETE"
                 }
             ]
         }
-    ],
-
-    "users": {
-        "service": "users",
-        "host": "http://localhost",
-        "port": "5000",
-        "url": "http://localhost:5000",
-        "routes": {
-            "/users": {
-                "POST": {
-                    "permissions": []
-                },
-                "GET": {
-                    "permissions": []
-                }
-            }
-        }
-    },
-    "books": {
-        "service": "books",
-        "host": "http://localhost",
-        "port": "3000",
-        "url":"http://localhost:3000",
-        "routes": {
-            "/books/admin":{
-                "POST": {
-                    "permissions": ["auth", "admin"]
-                }
-            },
-            "/books": {
-                "GET": {
-                    "permissions": []
-                }
-            }
-        }
-    },
-    "auth": {
-        "service": "auth",
-        "host": "http://localhost",
-        "port": "4000",
-        "url":"http://localhost:4000",
-        "routes": {
-            "/auth/login": {
-                "POST": {
-                    "permissions": []
-                }
-            },
-            ":4000/auth/signup": {
-                "POST": {
-                    "permissions": []
-                }
-            }
-        }
-    },
-    "orders": {
-        "service": "orders",
-        "host": "http://localhost",
-        "port": "6000",
-        "url":"http://localhost:6000"
-    }
+    ]
 }
