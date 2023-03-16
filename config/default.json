@@ -5,26 +5,72 @@
         {
             "name": "users",
             "url": "http://localhost:5000",
-            "route": [
+            "routes": [
                 {
                     "path": "/users",
-                    "method": "GET"
+                    "method": "GET",
+                    "permissions": ["auth", "admin"]
                 },
                 {
                     "path": "/users/:userId",
-                    "method": "GET"
+                    "method": "GET",
+                    "permissions": []
                 },
                 {
                     "path": "/users",
-                    "method": "POST"
+                    "method": "POST",
+                    "permissions": []
                 },
                 {
                     "path": "/users/:userId",
-                    "method": "PUT"
+                    "method": "PUT",
+                    "permissions": ["auth"]
                 },
                 {
                     "path": "/users/:userId",
-                    "method": "DELETE"
+                    "method": "DELETE",
+                    "permissions": ["auth"]
+                }
+            ]
+        },
+        {
+            "name": "books",
+            "url": "http://localhost:3000",
+            "routes": [
+                {
+                    "path": "/books/admin",
+                    "method": "POST",
+                    "permissions": ["auth", "admin"] 
+                },
+                {
+                    "path": "/books",
+                    "method": "GET",
+                    "permissions": []
+                },
+                {
+                    "path": "/books/:bookId",
+                    "method": "GET",
+                    "permissions": []
+                },
+                {
+                    "path": "/books/admin/:bookId",
+                    "method": "PATCH",
+                    "permissions": ["auth", "admin"]
+                },
+                {
+                    "path": "/books/admin/:bookId",
+                    "method": "DELETE",
+                    "permissions": ["auth", "admin"]
+                },
+                {
+                    "path": "/books/search",
+                    "method": "GET",
+                    "permissions": []
+                },
+                {
+                    "path": "/books/file/:bookId",
+                    "method": "GET",
+                    "permissions": ["auth"]
                 }
             ]
         }
