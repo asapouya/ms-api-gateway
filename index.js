@@ -29,16 +29,16 @@ services.forEach(service => {
                 const decodded = verify_token(token);
                 req.user = decodded;
                 if(route.permissions.includes("admin")) {
-                    if(decodded.admin === true) return
-                    return res.status(401).send("Unauthorized, Not an admin.");
+                    if(decodded.admin === true) ;
+                    else return res.status(401).send("Unauthorized, Not an admin.");
                 }
-            } 
-
+            }
+            
             req.headers["x-user"] = JSON.stringify(req.user);
             try {
                 const response = await axios({
                     method: req.method,
-                    url: service.url + route.path,
+                    url: service.url + req.url,
                     headers: req.headers,
                     data: req.body
                 });

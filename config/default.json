@@ -27,7 +27,7 @@
                     "permissions": ["auth"]
                 },
                 {
-                    "path": "/users/:userId",
+                    "path": "/users",
                     "method": "DELETE",
                     "permissions": ["auth"]
                 }
@@ -48,7 +48,7 @@
                     "permissions": []
                 },
                 {
-                    "path": "/books/:bookId",
+                    "path": "/books/getBook/:bookId",
                     "method": "GET",
                     "permissions": []
                 },
@@ -69,6 +69,53 @@
                 },
                 {
                     "path": "/books/file/:bookId",
+                    "method": "GET",
+                    "permissions": ["auth"]
+                }
+            ]
+        },
+        {
+            "name": "auth",
+            "url": "http://localhost:4000",
+            "routes": [
+                {
+                    "path": "/auth/login",
+                    "method": "POST",
+                    "permissions": []
+                },
+                {
+                    "path": "/auth/signup",
+                    "method": "POST",
+                    "permissions": []
+                }
+            ]
+        },
+        {
+            "name": "orders",
+            "url": "http://localhost:6000",
+            "routes": [
+                {
+                    "path": "/orders/:bookId",
+                    "method": "POST",
+                    "permissions": ["auth"]
+                },
+                {
+                    "path": "/orders/:orderId/:bookId",
+                    "method": "PATCH",
+                    "permissions": ["auth"]
+                },
+                {
+                    "path": "/orders/:orderId",
+                    "method": "DELETE",
+                    "permissions": ["auth"]
+                },
+                {
+                    "path": "/orders/:orderId",
+                    "method": "GET",
+                    "permissions": ["auth"]
+                },
+                {
+                    "path": "/orders",
                     "method": "GET",
                     "permissions": ["auth"]
                 }
