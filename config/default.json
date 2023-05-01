@@ -40,7 +40,8 @@
                 {
                     "path": "/books/admin",
                     "method": "POST",
-                    "permissions": ["auth", "admin"] 
+                    "permissions": ["auth", "admin"],
+                    "formData": true
                 },
                 {
                     "path": "/books",

@@ -3,7 +3,11 @@ const config = require("config");
 
 class Generate_token{
     static verify_token(token){
-        return jwt.verify(token, config.get("JWT_PRIVATE_KEY"));
+        try {
+            return jwt.verify(token, config.get("JWT_PRIVATE_KEY"));
+        } catch (err) {
+            return err
+        }
     }
 }
 
