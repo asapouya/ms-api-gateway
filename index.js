@@ -13,6 +13,13 @@ if(!config.get("JWT_PRIVATE_KEY")) {
     process.exit(1);
 }
 
+process.on("uncaughtException", err => {
+    if(err) return console.log(err);
+})
+process.on("unhandledRejection", err => {
+    if(err) return console.log(err);
+})
+
 app.use(fileUpload({createParentPath: true}));
 app.use(express.json());
 
@@ -44,13 +51,15 @@ services.forEach(service => {
                     console.log(req.headers);
                     let bodyFormData = new FormData();
                     for(const key in req.body) {
-                        console.log(`${key} = ${req.body[key]}`);
                         bodyFormData.append(key, req.body[key]);
                     }
 
                 if(!req.files) return res.status(400).send("File is required.");
                 const file = req.files.file;
-                if(!file.mimetype == "application/pdf") return res.status(400).send('"file" must be a pdf.');
+
+                console.log(file.mimetype);
+                if(file.mimetype != route.formData.mimetype) return res.status(400).send(`"file" must be of type "${route.formData.mimetype}"`);
+
                 filePath = __dirname + "/pdfs/" + file.name;
                 await file.mv(filePath);
                 const pdfFile = await readFile(filePath); 
@@ -80,10 +89,12 @@ services.forEach(service => {
                 res.status(err.response.status).header(err.response.headers).send(err.response.data);
             }finally {
                 if(route.formData){
-                    unlink(filePath, err => {
-                        if(err) return console.log(err);
-                        console.log(`${filePath} is deleted.`);
-                    });
+                    if(filePath) {
+                        unlink(filePath, err => {
+                            if(err) return console.log(err);
+                            console.log(`${filePath} is deleted.`);
+                        });
+                    }
                 }
             }
         })

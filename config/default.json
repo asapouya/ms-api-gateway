@@ -41,7 +41,9 @@
                     "path": "/books/admin",
                     "method": "POST",
                     "permissions": ["auth", "admin"],
-                    "formData": true
+                    "formData": {
+                        "mimetype": "application/pdf"
+                    }
                 },
                 {
                     "path": "/books",
