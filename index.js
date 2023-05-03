@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
 const config = require("config");
-const fs = require("fs/promises");
-const Blob = require("node-blob"); 
+const { readFile } = require("fs/promises");
+const { unlink } = require("fs");
+const { Blob } = require("buffer");
 const axios = require("axios");
 const fileUpload = require("express-fileupload");
 const {verify_token} = require("./utils/auth");
@@ -35,8 +36,9 @@ services.forEach(service => {
                     else return res.status(401).send("Unauthorized, Not an admin.");
                 }
             }
+            let filePath = null;
+            let response;
             try {
-                let response;
                 req.headers["x-user"] = JSON.stringify(req.user);
                 if(route.formData) {
                     console.log(req.headers);
@@ -45,17 +47,16 @@ services.forEach(service => {
                         console.log(`${key} = ${req.body[key]}`);
                         bodyFormData.append(key, req.body[key]);
                     }
+
                 if(!req.files) return res.status(400).send("File is required.");
+                const file = req.files.file;
+                if(!file.mimetype == "application/pdf") return res.status(400).send('"file" must be a pdf.');
+                filePath = __dirname + "/pdfs/" + file.name;
+                await file.mv(filePath);
+                const pdfFile = await readFile(filePath); 
+                const pdfBlob = new Blob([pdfFile], {type: "application/pdf"});
+                bodyFormData.append("file", pdfBlob, file.name);
 
-                const filePath = __dirname + "/pdfs/" + req.files.file.name;
-                await req.files.file.mv(filePath);
-                
-                const pdfFile = await fs.readFile(filePath); 
-
-                const pdfBlob = new Blob(pdfFile);
-
-                bodyFormData.append("file", pdfBlob, req.files.file.name);
-                
                 response = await axios({
                     method: req.method,
                     url: service.url + req.url,
@@ -77,6 +78,13 @@ services.forEach(service => {
                 console.log(err)
                 if(!err.response) return res.status(500).send("Internal Server Error.");
                 res.status(err.response.status).header(err.response.headers).send(err.response.data);
+            }finally {
+                if(route.formData){
+                    unlink(filePath, err => {
+                        if(err) return console.log(err);
+                        console.log(`${filePath} is deleted.`);
+                    });
+                }
             }
         })
     });

@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-class Generate_token{
+class JWT{
     static verify_token(token){
         try {
             return jwt.verify(token, config.get("JWT_PRIVATE_KEY"));
@@ -11,4 +11,4 @@ class Generate_token{
     }
 }
 
-module.exports = Generate_token;
+module.exports = JWT;
