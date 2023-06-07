@@ -121,6 +121,11 @@
                     "path": "/orders",
                     "method": "GET",
                     "permissions": ["auth"]
+                },
+                {
+                    "path": "/orders/finalize/:orderId",
+                    "method": "POST",
+                    "permissions": ["auth"]
                 }
             ]
         }

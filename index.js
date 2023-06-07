@@ -65,7 +65,6 @@ services.forEach(service => {
                 const pdfFile = await readFile(filePath); 
                 const pdfBlob = new Blob([pdfFile], {type: "application/pdf"});
                 bodyFormData.append("file", pdfBlob, file.name);
-
                 response = await axios({
                     method: req.method,
                     url: service.url + req.url,
@@ -74,7 +73,9 @@ services.forEach(service => {
                 });
                 res.status(response.status).header(response.headers).send(response.data);
 
-            }else{ 
+            }else{
+                console.log(service.url + req.url);
+
                 response = await axios({
                     method: req.method,
                     url: service.url + req.url,
