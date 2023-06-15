@@ -7,6 +7,8 @@ const { Blob } = require("buffer");
 const axios = require("axios");
 const fileUpload = require("express-fileupload");
 const {verify_token} = require("./utils/auth");
+const YAML = require("yamljs");
+const swaggerUiExpress = require("swagger-ui-express");
 
 if(!config.get("JWT_PRIVATE_KEY")) {
     console.log("FATAL ERROR: JWT_PRIVATE_KEY not defined!");
@@ -20,8 +22,11 @@ process.on("unhandledRejection", err => {
     if(err) return console.log(err);
 })
 
+const swaggerDoc = YAML.load("./docs.yml");
+
 app.use(fileUpload({createParentPath: true}));
 app.use(express.json());
+app.use("/", swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDoc));
 
 const services = config.get("services");
 

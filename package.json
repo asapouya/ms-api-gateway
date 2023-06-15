@@ -19,6 +19,8 @@
     "joi-password-complexity": "^5.1.0",
     "jsonwebtoken": "^9.0.0",
     "node-blob": "^0.0.2",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "swagger-ui-express": "^4.6.3",
+    "yamljs": "^0.3.0"
   }
 }
