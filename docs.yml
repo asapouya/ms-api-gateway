@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: Books API
+  description: This is a simple books api
+  contact:
+    email: pouyafeizolahip.f2@gmail.com
+  version: 1.0.11
+servers:
+  - url: http://localhost:9000
+tags:
+  - name: users
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: Create user
+      operationId: creatUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userResponse'
+        '400':
+          description: Invalid Request
+    delete:
+      tags: 
+        - users
+      summary: delete user
+      operationId: deleteUser 
+      responses: 
+        '200':
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userDeleted'
+        '404': 
+          description: User not found
+      security:
+        - JWT: []
+  
+  
+  /users/{userId}: 
+    get:
+      tags:
+        - users
+      summary: get user
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema: 
+            type: string
+      responses: 
+        '200':
+          description: Get user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userResponse'
+        '404': 
+          description: User not found
+                
+                
+components:
+  schemas:
+    user:
+      required:
+        - username
+        - email
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+          format: varchar
+          example: johnDoe
+        email:
+          type: string
+          example: johnDoe@example.com
+        password:
+          type: string
+          example: John1234@
+    userResponse: 
+      type: object
+      properties: 
+        username:
+          type: string
+          format: varchar
+          example: johnDoe
+        email:
+          type: string
+          example: johnDoe@example.com
+    userDeleted:
+      type: object
+      properties:
+        acknowledged:
+          type: boolean
+          format: boolean
+          example: true
+        deletedCount:
+          type: number
+          format: int32
+          example: 1
+        
+        
+          
+          
+          
+  securitySchemes:
+    JWT: 
+      type: apiKey
+      in: header
+      name: x-auth-token
